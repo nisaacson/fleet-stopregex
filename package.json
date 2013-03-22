@@ -1,6 +1,6 @@
 {
   "name": "fleet-stopregex",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "description": "Fleet stop with fields and regex parameters",
   "main": "index.js",
   "scripts": {
@@ -20,7 +20,8 @@
     "eyespect": "~0.1.8",
     "optimist": "~0.3.5",
     "fleet-ps-json": "0.0.1",
-    "prompt": "~0.2.9"
+    "prompt": "~0.2.9",
+    "async": "~0.2.6"
   },
   "bin": "./cli.js"
 }
