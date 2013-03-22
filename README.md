@@ -37,3 +37,19 @@ Flags can be passed as optional last parameter. This flags are the same as you w
 # stop processes with name both foo or Foo
 fleet-stopregex --field command foo i
 ```
+
+**Stop everything**
+Pass a "." as the regex which will match everything
+```bash
+fleet-stopregex .
+```
+
+Note that * will not work as regex string unless it is quoted as "*"
+```bash
+# Good
+fleet-stopregex "*"
+```
+```bash
+# Bad
+fleet-stopregex *
+```

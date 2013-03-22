@@ -1,12 +1,4 @@
-#! /usr/bin/env node
 var prompt = require('prompt');
-prompt.start();
-
-function onErr(err) {
-  console.log(err);
-  return 1;
-}
-
 var async = require('async')
 var should = require('should');
 var getPSJson = require('fleet-ps-json')
@@ -17,14 +9,7 @@ var inspect = require('eyespect').inspector();
 var argv = opts.argv
 var field = argv.field || 'pid'
 var validFields = ['pid', 'commit', 'command']
-stop(function (err) {
-  if (err) {
-    inspect(err.message)
-    return
-  }
-})
-
-function stop(cb) {
+module.exports = function stop(cb) {
   var index = validFields.indexOf(field)
   if (index < 0) {
     return cb({
@@ -32,8 +17,15 @@ function stop(cb) {
       stack: new Error().stack
     })
   }
-  var regexString = argv._[1]
-  var flags = argv._[2]
+  if (argv._.length === 0) {
+    return cb({
+      message: 'Usage: fleet-stopregex --field [command] <regex> <optional regex flags>, where command is one of "pid", "commit", or "command"'
+    })
+  }
+  var regexString
+  var flags
+  regexString = argv._[0]
+  flags = argv._[1]
   var regex = new RegExp(regexString, flags)
   if (!regex) {
     return cb({
@@ -53,6 +45,7 @@ function stop(cb) {
 }
 
 function getPIDsToKill(field, json, regex, cb) {
+
   var elements = json.filter(function (e) {
     var text = e[field]
     return regex.test(text)
@@ -62,6 +55,7 @@ function getPIDsToKill(field, json, regex, cb) {
     inspect('no matching processes found')
     return cb()
   }
+  prompt.start();
   prompt.get("are you sure you want to kill these processes? [yes/no]", function(err, reply) {
     if (err) return cb(err);
     var value = reply[Object.keys(reply)[0]]

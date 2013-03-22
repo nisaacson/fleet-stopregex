@@ -21,5 +21,6 @@
     "optimist": "~0.3.5",
     "fleet-ps-json": "0.0.1",
     "prompt": "~0.2.9"
-  }
+  },
+  "bin": "./cli.js"
 }
