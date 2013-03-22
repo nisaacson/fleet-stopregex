@@ -1,0 +1,25 @@
+{
+  "name": "fleet-stopregex",
+  "version": "0.0.1",
+  "description": "Fleet stop with fields and regex parameters",
+  "main": "index.js",
+  "scripts": {
+    "test": "node_modules/.bin/mocha --reporter spec"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git://github.com/nisaacson/fleet-stopregex.git"
+  },
+  "keywords": [
+    "fleet"
+  ],
+  "author": "Noah Isaacson",
+  "license": "BSD",
+  "readmeFilename": "README.md",
+  "dependencies": {
+    "eyespect": "~0.1.8",
+    "optimist": "~0.3.5",
+    "fleet-ps-json": "0.0.1",
+    "prompt": "~0.2.9"
+  }
+}
