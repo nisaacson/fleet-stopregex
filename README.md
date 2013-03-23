@@ -1,4 +1,4 @@
-Fleet stop with fields and regex parameters
+A more advanced `fleet-stop` command line tool that supports regular expressions. [Fleet](https://github.com/substack/fleet) by Substack is an excellent for managing deployment. However stopping running processes can be a bit tedious. The `fleet-stopregex` module provides a command-line tool to stop drone process command and commit in addition to the standard `fleet-stop pid#foo` command. You can pass a regular expression as the last parameter. Any drones which match this regular expression will be stopped.
 
 # Installation
 ```bash
@@ -9,7 +9,7 @@ npm install -g fleet-stopregex
 ```bash
 fleet-stopregex --field [command, commit, pid] <regex> <regex flags>
 ```
-The script matches the regular expression against the specified all field for every spawned process. For any process which matches, that process is then killed
+The script matches the regular expression against the specified all field for every spawned process. For any process which matches, that process is then killed. You will receive a prompt asking you to confirm killing the processes before they are killed
 
 If field is omitted then **pid** will be used as the default.
 
@@ -20,7 +20,7 @@ Note that *--field* is aliased to *-f*, therefore
 
 **Stop PID**
 Same as vanilla fleet-stop. However fleet-stopregex will retry the stop command until it succeeds
-```bash
+```
 fleet-stopregex pid#b0a13c
 ```
 
@@ -53,3 +53,6 @@ fleet-stopregex "*"
 # Bad
 fleet-stopregex *
 ```
+
+# Inspiration
+This module came out of the [managing redeploy](https://github.com/substack/fleet/issues/18) issue
