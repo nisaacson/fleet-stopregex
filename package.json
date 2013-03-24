@@ -1,6 +1,6 @@
 {
   "name": "fleet-stopregex",
-  "version": "0.0.4",
+  "version": "0.0.5",
   "description": "Fleet stop with fields and regex parameters",
   "main": "index.js",
   "scripts": {

@@ -10,7 +10,7 @@ module.exports = function killPID(pid, callback) {
       return killed
     },
     function(cb) {
-      var cmd = 'fleet-stop ' + pid
+      var cmd = 'fleet-stop ' + 'pid#' + pid
       console.log(cmd)
       var patternPID = pid.replace(/pid#/, '')
       var pattern = new RegExp('stopped ' + patternPID)
