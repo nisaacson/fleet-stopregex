@@ -23,5 +23,9 @@
     "prompt": "~0.2.9",
     "async": "~0.2.6"
   },
-  "bin": "./cli.js"
+  "bin": "./cli.js",
+  "devDependencies": {
+    "mocha": "~1.12.0",
+    "should": "~1.2.2"
+  }
 }
