@@ -6,15 +6,24 @@ npm install -g fleet-stopregex
 ```
 
 # Usage
+
 ```bash
 fleet-stopregex --field [command, commit, pid] <regex> <regex flags>
 ```
+
 The script matches the regular expression against the specified all field for every spawned process. For any process which matches, that process is then killed. You will receive a prompt asking you to confirm killing the processes before they are killed
 
 If field is omitted then **pid** will be used as the default.
 
 Note that *--field* is aliased to *-f*, therefore
 `fleet-stopregex --field command` = `fleet-stopregex -f command`
+
+
+To automatically stop all matching process without confirmation, pass the `-y` or `--yes` flag as a parameter
+
+```bash
+fleet-stopregex --yes --field commit fbdcfba04752fe6f42be6e49461b8d2dec63c31e
+```
 
 # Examples
 
@@ -26,6 +35,7 @@ fleet-stopregex pid#b0a13c
 
 **By Git Commit**
 Stop all processes which have an exact commit
+
 ```bash
 fleet-stopregex --field commit fbdcfba04752fe6f42be6e49461b8d2dec63c31e
 ```

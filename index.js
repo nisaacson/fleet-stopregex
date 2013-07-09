@@ -2,12 +2,20 @@ var prompt = require('prompt');
 var async = require('async')
 var getPSJson = require('fleet-ps-json')
 var getPSText = require('./getPSText')
-var opts = require('optimist').usage('Usage:  --field [command] $0, where command is one of "pid", "commit", or "command"').alias('f','field')
+var aliases = {
+  "f": "field",
+  "y": "yes"
+}
+var opts = require('optimist').usage('Usage:  --field [command] $0, where command is one of "pid", "commit", or "command"').alias(aliases)
 var killPID = require('./killPID')
 var inspect = require('eyespect').inspector();
 var argv = opts.argv
 var field = argv.field || 'pid'
 var validFields = ['pid', 'commit', 'command']
+var skipConfirm = false
+if (argv.yes) {
+  skipConfirm = true
+}
 module.exports = function stop(cb) {
   var index = validFields.indexOf(field)
   if (index < 0) {
@@ -33,7 +41,7 @@ module.exports = function stop(cb) {
     })
 
   }
-  getPSText(function (err, text) {
+  getPSText(function(err, text) {
     if (err) {
       inspect(err)
       return process.exit(1)
@@ -45,7 +53,7 @@ module.exports = function stop(cb) {
 
 function getPIDsToKill(field, json, regex, cb) {
 
-  var elements = json.filter(function (e) {
+  var elements = json.filter(function(e) {
     var text = e[field]
     return regex.test(text)
   })
@@ -54,24 +62,35 @@ function getPIDsToKill(field, json, regex, cb) {
     inspect('no matching processes found')
     return cb()
   }
+  confirmStopIfNeeded(function(err, stop) {
+    if (err) {
+      return cb(err)
+    }
+    if (!stop) {
+      return cb()
+    }
+    var pids = elements.map(function(e) {
+      return e.pid
+    })
+    if (pids.length === 0) {
+      return cb(null, false)
+    }
+    async.forEachSeries(pids, killPID, cb)
+  })
+}
+
+function confirmStopIfNeeded(cb) {
+  if (skipConfirm) {
+    return cb(null, true)
+  }
   prompt.start();
   prompt.get("are you sure you want to kill these processes? [yes/no]", function(err, reply) {
     if (err) return cb(err);
     var value = reply[Object.keys(reply)[0]]
     if (value !== 'yes' && value !== 'y') {
       inspect('aborted!')
-      return cb()
+      return cb(null, false)
     }
-    var pids = elements.map(function (e) {
-      return e.pid
-    })
-    if (pids.length === 0) {
-      return cb()
-    }
-    async.forEachSeries(pids, killPID, cb)
+    return cb(null, true)
   })
-}
-
-function confirmStop(input, callback) {
-  inspect(input, 'confirm stop input')
 }
